@@ -45,11 +45,7 @@ export default class ResMgr {
     });
   }
 
-  public async preLoad(
-    resList: Array<ResParams>,
-    endFunc: Function,
-    progressFunc?: Function
-  ) {
+  public async preLoad(resList: Array<ResParams>, endFunc: Function, progressFunc?: Function) {
     this.assetMap = {};
     this.endFunc = endFunc;
     this.progressFunc = progressFunc;
@@ -83,11 +79,11 @@ export default class ResMgr {
             console.log("🚀 ~ ResMgr ~ url ~ error:" + url, error);
           }
         }
+
+        //加载完成之后卸载资源
+        // assetManager.removeBundle(ab);
       } catch (error) {
-        console.log(
-          "🚀 ~ ResMgr ~ preLoad ~ bundleName:" + item.bundleName,
-          error
-        );
+        console.log("🚀 ~ ResMgr ~ preLoad ~ bundleName:" + item.bundleName, error);
       }
     }
 
@@ -111,18 +107,14 @@ export default class ResMgr {
     }
   ) {
     return new Promise<AssetManager.Bundle>((resolve, reject) => {
-      assetManager.loadBundle(
-        nameOrUrl,
-        options,
-        (err: Error, assets: AssetManager.Bundle) => {
-          if (err) {
-            reject(err);
-            return;
-          }
-
-          resolve(assets);
+      assetManager.loadBundle(nameOrUrl, options, (err: Error, assets: AssetManager.Bundle) => {
+        if (err) {
+          reject(err);
+          return;
         }
-      );
+
+        resolve(assets);
+      });
     });
   }
 }
